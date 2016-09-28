@@ -30,37 +30,12 @@ public class EchoServer {
 			InetSocketAddress inetsocketaddress = new InetSocketAddress(ip, PORT);
 			serversocket.bind(inetsocketaddress);
 
-			// 3. accept
-			socket = serversocket.accept();
-			try {
-				// 4. IOStream 받기
-				InputStream inputstream = socket.getInputStream();
-				OutputStream outputstream = socket.getOutputStream();
+			while (true) {
+				// 3. accept
+				socket = serversocket.accept();
 
-				BufferedReader br = new BufferedReader(new InputStreamReader(inputstream));
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(outputstream));
-
-				while (true) {
-					// 5. 데이터 읽기
-					String data = br.readLine();
-					if (data == null) {
-						System.out.println("[server] closed by client");
-						break;
-					}
-					System.out.println("[server] received " + data);
-
-					// 6. 쓰기
-					pw.println(data);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					// 7. 자원정리
-					socket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				Thread thread = new EchoServerReceiveThread(socket);
+				thread.start();
 			}
 
 		} catch (SocketException ex) {
@@ -70,7 +45,7 @@ public class EchoServer {
 		} finally {
 			try {
 				if (serversocket != null && serversocket.isClosed() == false) {
-				serversocket.close();
+					serversocket.close();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
