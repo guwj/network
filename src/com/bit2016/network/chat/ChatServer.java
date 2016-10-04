@@ -20,6 +20,9 @@ public class ChatServer {
 			// 1. 서버소켓 생성
 			serversocket = new ServerSocket();
 			
+			// 1-1. set option SO_REUSEADDR ( 종료 후 빨리 binding 하기 위함, 필수 )
+			serversocket.setReuseAddress(true);
+			
 			// 2. binding
 			String localhost = InetAddress.getLocalHost().getHostAddress();
 			serversocket.bind(new InetSocketAddress(localhost, PORT));		// backlog : 스레드를 생성해서 소켓을 태워 보내는 순간에 커넥트리퀘스트가 들어오면 그걸 받아놓는 것을 말한다

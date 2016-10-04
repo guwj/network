@@ -36,7 +36,7 @@ public class ChatServerThread extends Thread {
 			// 3. 채팅 돌아가는 곳
 			while (true) {
 				String line = br.readLine();
-				if (line == null) { // 클라이언트가 강제종료한 경우
+				if (line == null) { // 클라이언트가 강제종료한 경우		
 					doQuit(pw);
 					break;
 				}
@@ -107,7 +107,7 @@ public class ChatServerThread extends Thread {
 
 	private void broadcastMessage(String message) {
 		synchronized (listPrintWriter) {
-			for (PrintWriter printWriter : listPrintWriter) {
+			for (PrintWriter printWriter : listPrintWriter) {	//---------------이러면 pw 다 읽는거 아닌지??
 				printWriter.println(message);
 			}
 		}
